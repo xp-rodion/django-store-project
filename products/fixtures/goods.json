@@ -1,0 +1,50 @@
+[
+  {
+    "model": "products.product",
+    "pk": 1,
+    "fields": {
+      "name": "Худи черного цвета с монограммами adidas Originals",
+      "description": "Мягкая ткань для свитшотов. Стиль и комфорт – это образ жизни.",
+      "price": "6090.0",
+      "quantity": 5,
+      "image": "products_images/Adidas-hoodie.png",
+      "category": 1
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 2,
+    "fields": {
+      "name": "Кожаные ботинки",
+      "description": "Хорошая кожа, выдерживает 2 сезона.",
+      "price": "3200.0",
+      "quantity": 4,
+      "image": "products_images/Black-Dr-Martens-shoes.png",
+      "category": 2
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 3,
+    "fields": {
+      "name": "Рюкзак Nike",
+      "description": "Удобный и современный рюкзак",
+      "price": "2200.0",
+      "quantity": 4,
+      "image": "products_images/Black-Nike-Heritage-backpack.png",
+      "category": 5
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 4,
+    "fields": {
+      "name": "Голубая куртка",
+      "description": "Теплая, зимняя куртка, способна выдержать до -30 градусов.",
+      "price": "12990.0",
+      "quantity": 2,
+      "image": "products_images/Blue-jacket-The-North-Face.png",
+      "category": 1
+    }
+  }
+]
