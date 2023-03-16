@@ -22,7 +22,7 @@
                         <th scope="row"> {{ order.id }}</th>
                         <td>{{ order.get_status_display }}</td>
                         <td>{{ order.created }}</td>
-                        <td>{{ order.basket_history.total_sum }}</td>
+                        <td>{{ order.basket_history.total_sum }} руб.</td>
                         <td>
                             <a href="{% url 'orders:order' order.id %}">Просмотреть</a>
                         </td>

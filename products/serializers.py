@@ -1,6 +1,6 @@
-from rest_framework import serializers
-from rest_framework import fields
-from products.models import Product, ProductCategory, BasketItem
+from rest_framework import fields, serializers
+
+from products.models import BasketItem, Product, ProductCategory
 
 
 class ProductSerializer(serializers.ModelSerializer):

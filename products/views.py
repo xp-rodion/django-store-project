@@ -3,8 +3,8 @@ from django.shortcuts import HttpResponseRedirect
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 
-from common.views import TitleMixin
-from products.models import BasketItem, Product, ProductCategory
+from common.views import ProductMixin, TitleMixin
+from products.models import BasketItem, Product
 
 
 class IndexView(TitleMixin, TemplateView):
@@ -12,22 +12,24 @@ class IndexView(TitleMixin, TemplateView):
     title = 'Store'
 
 
-class ProductsListView(TitleMixin, ListView):
+class ProductsListView(ProductMixin, ListView):
     template_name = 'products/products.html'
-    model = Product
-    paginate_by = 2
     title = 'Store - Каталог'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(ProductsListView, self).get_context_data()
-        context['categories'] = ProductCategory.objects.all()
+
+class ProductsAfterCategoriesListView(ProductMixin, ListView):
+    template_name = 'products/products_category.html'
+    title = 'Store - Каталог'
+
+    def get_context_data(self, *, products=None, **kwargs):
+        context = super(ProductsAfterCategoriesListView, self).get_context_data(products=None, **kwargs)
+        context['category_id'] = self.kwargs.get('category_id')
         return context
 
     def get_queryset(self):
-        queryset = super(ProductsListView, self).get_queryset()
         category_id = self.kwargs.get('category_id')
-        print(queryset)
-        return queryset.filter(category_id=category_id) if category_id else queryset
+        queryset = super(ProductsAfterCategoriesListView, self).get_queryset()
+        return queryset.filter(category_id=category_id)
 
 
 @login_required
