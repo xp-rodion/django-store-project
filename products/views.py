@@ -16,6 +16,11 @@ class ProductsListView(ProductMixin, ListView):
     template_name = 'products/products.html'
     title = 'Store - Каталог'
 
+    def get_context_data(self, *, products=None, **kwargs):
+        context = super().get_context_data(products=None, **kwargs)
+        context['is_auth'] = self.request.user.is_authenticated
+        return context
+
 
 class ProductsAfterCategoriesListView(ProductMixin, ListView):
     template_name = 'products/products_category.html'

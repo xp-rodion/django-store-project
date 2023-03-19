@@ -50,7 +50,9 @@
                     <span class="sr-only">Next</span>
                 </a>
             </div>
-
+            {% if not is_auth %}
+                    <span class="border border-danger"> Для того, чтобы добавлять предметы в корзину нужно авторизоваться/зарегистрироваться </span>
+            {% endif %}
             <div class="row">
             {% if products %}
                 {% for product in products %}
@@ -68,9 +70,15 @@
                             <h5>{{ product.price }} руб. </h5>
                             <p class="card-text"> {{ product.description }}</p>
                         </div>
+                        {% if is_auth %}
                         <div class="card-footer text-center">
                             <a class="btn btn-outline-success" href="{% url 'products:basket_add' product.id %}"> Отправить в корзину </a>
                         </div>
+                            {% else %}
+                            <div class="card-footer text-center">
+                                <a class="btn btn-outline-success" href="{% url 'users:login' %}"> Авторизоваться </a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 {% endfor %}
