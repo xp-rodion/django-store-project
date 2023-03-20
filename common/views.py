@@ -1,3 +1,5 @@
+from django.http import HttpResponse
+
 from products.models import Product, ProductCategory
 
 
@@ -19,3 +21,12 @@ class ProductMixin(TitleMixin):
         context = super(ProductMixin, self).get_context_data()
         context['categories'] = ProductCategory.objects.all()
         return context
+
+
+def validate_quantity(item, operation=False):
+        product = Product.objects.get(id=item.product_id)
+        if product.quantity < 1:
+            return False
+        if operation:
+            product.quantity -= item.quantity
+            product.save()

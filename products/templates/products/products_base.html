@@ -71,9 +71,15 @@
                             <p class="card-text"> {{ product.description }}</p>
                         </div>
                         {% if is_auth %}
+                            {% if product.quantity < 1 %}
+                                    <div>
+                                        <p class="text-center"> Данный товар отсутствует, приносим извинения. </p>
+                                    </div>
+                                {% else %}
                         <div class="card-footer text-center">
                             <a class="btn btn-outline-success" href="{% url 'products:basket_add' product.id %}"> Отправить в корзину </a>
                         </div>
+                            {% endif %}
                             {% else %}
                             <div class="card-footer text-center">
                                 <a class="btn btn-outline-success" href="{% url 'users:login' %}"> Авторизоваться </a>

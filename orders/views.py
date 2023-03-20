@@ -10,7 +10,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 
-from common.views import TitleMixin
+from common.views import TitleMixin, validate_quantity
 from orders.forms import OrderForm
 from orders.models import Order
 from products.models import BasketItem
@@ -58,6 +58,9 @@ class OrderCreateView(TitleMixin, CreateView):
     def post(self, request, *args, **kwargs):
         super(OrderCreateView, self).post(request, *args, **kwargs)
         baskets = BasketItem.objects.filter(user=self.request.user)
+        for item in baskets:
+            if not validate_quantity(item):
+                return HttpResponse(f'Error: Товар {item.product} закончился.')
         checkout_session = stripe.checkout.Session.create(
             line_items=baskets.stripe_products(),
             metadata={'order_id': self.object.id},

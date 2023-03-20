@@ -1,6 +1,8 @@
 from django.db import models
+from django.http import HttpResponse
 
-from products.models import BasketItem
+from common.views import validate_quantity
+from products.models import BasketItem, Product
 from users.models import User
 
 
@@ -41,6 +43,9 @@ class Order(models.Model):
 
     def update_after_payment(self):
         baskets = BasketItem.objects.filter(user=self.initiator)
+        for item in baskets:
+            if not validate_quantity(item, operation=True):
+                return HttpResponse(f'Error: Товар {item.product} закончился.')
         self.status = self.PAID
         baskets.delete()
         self.save(update=True)
