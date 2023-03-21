@@ -24,9 +24,8 @@ class ProductMixin(TitleMixin):
 
 
 def validate_quantity(item, operation=False):
-        product = Product.objects.get(id=item.product_id)
-        if product.quantity < 1:
-            return False
-        if operation:
-            product.quantity -= item.quantity
-            product.save()
+    product = Product.objects.get(id=item.product_id)
+    if operation:
+        product.quantity -= item.quantity
+        product.save()
+    return True if product.quantity < 1 else False

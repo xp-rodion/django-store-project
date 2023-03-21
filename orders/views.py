@@ -13,6 +13,7 @@ from django.views.generic.list import ListView
 from common.views import TitleMixin, validate_quantity
 from orders.forms import OrderForm
 from orders.models import Order
+from orders.tasks import send_information_order
 from products.models import BasketItem
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -59,7 +60,7 @@ class OrderCreateView(TitleMixin, CreateView):
         super(OrderCreateView, self).post(request, *args, **kwargs)
         baskets = BasketItem.objects.filter(user=self.request.user)
         for item in baskets:
-            if not validate_quantity(item):
+            if validate_quantity(item):
                 return HttpResponse(f'Error: Товар {item.product} закончился.')
         checkout_session = stripe.checkout.Session.create(
             line_items=baskets.stripe_products(),
@@ -109,3 +110,4 @@ def fulfill_order(session):
     order_id = int(session.metadata.order_id)
     order = Order.objects.get(id=order_id)
     order.update_after_payment()
+    send_information_order.delay(order_id)
