@@ -225,3 +225,5 @@ REST_FRAMEWORK = {
     ],
 
 }
+
+ORDER_CACHE_NAME = 'order_name'

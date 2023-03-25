@@ -2,6 +2,7 @@ from http import HTTPStatus
 
 import stripe
 from django.conf import settings
+from django.core.cache import cache
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
@@ -36,11 +37,21 @@ class OrderListView(TitleMixin, ListView):
     ordering = ('-id')
 
     def get_queryset(self):
-        queryset = super(OrderListView, self).get_queryset()
-        return queryset.filter(initiator=self.request.user)
+        order_cache_name = settings.ORDER_CACHE_NAME
+        order_cache = cache.get(order_cache_name)
+
+        if order_cache:
+            filter_queryset = order_cache
+        else:
+            queryset = super(OrderListView, self).get_queryset()
+            filter_queryset = queryset.filter(initiator=self.request.user)
+            cache.set(order_cache_name, filter_queryset, 30)
+
+        return filter_queryset
 
 
 class OrderDetailView(DetailView):
+
     template_name = 'orders/order.html'
     model = Order
 

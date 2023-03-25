@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.cache import cache
 from django.core.mail import send_mail
 from django.db import models
 from django.http import HttpResponse
@@ -41,6 +42,7 @@ class Order(models.Model):
                 'purchased_items': [basket.de_json() for basket in baskets],
                 'total_sum': float(baskets.total_sum()),
             }
+        cache.delete(settings.ORDER_CACHE_NAME)
         return super(Order, self).save(force_insert=False, force_update=False, using=None,
                                        update_fields=None)
 
